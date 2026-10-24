@@ -1,0 +1,10 @@
+{
+  "description": "An immersive scroll-driven portfolio that narrates a frontend developer's journey through interactive chalkboard visuals and animated storytelling.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
