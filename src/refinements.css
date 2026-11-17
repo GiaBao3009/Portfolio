@@ -168,3 +168,46 @@
   .board .transformation-artifact .project-print { will-change: auto; }
   .board .reveal { translate: none !important; transition: none; }
 }
+
+/* Chalkboard Language Toggle Button */
+.board .lang-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(244, 240, 230, 0.06);
+  border: 1px solid rgba(244, 240, 230, 0.22);
+  border-radius: 999px;
+  padding: 5px 12px;
+  color: var(--color-chalk);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.board .lang-toggle-btn:hover {
+  border-color: var(--color-yellow);
+  background: rgba(232, 197, 71, 0.12);
+  color: #fff;
+}
+
+.board .lang-toggle-btn .lang-badge {
+  opacity: 0.45;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.board .lang-toggle-btn .lang-badge.is-active {
+  opacity: 1;
+  color: var(--color-yellow);
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(232, 197, 71, 0.4);
+}
+
+.board .lang-toggle-btn .lang-sep {
+  opacity: 0.3;
+  font-size: 9px;
+}
+

@@ -1,15 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import ChapterNavigation from './ChapterNavigation'
 import SelectedWorks from './SelectedWorks'
+import { useI18n } from './assets/i18n'
 
-// Danh sách 5 chương câu chuyện theo cấu trúc chuẩn
-const chapters = [
-  'The first mark',
-  'A mind full of ideas',
-  'Selected works',
-  'Still in progress',
-  'The next chapter',
-]
 
 /**
  * Component SVG Chiếc máy bay giấy Origami
@@ -104,6 +97,10 @@ function findSampleIndex(
  * Component chính điều phối toàn bộ Portfolio
  */
 export default function App() {
+  // Lấy dữ liệu đa ngôn ngữ và hàm chuyển đổi ngôn ngữ
+  const { t, lang, toggleLang } = useI18n()
+  const chapters = t.chaptersList
+
   // Trạng thái chương hiện tại (0 -> 4)
   const [active, setActive] = useState(0)
 
@@ -215,7 +212,7 @@ export default function App() {
       // Vùng chắn để mask không che mất chữ
       const clear = [
         ...board.current.querySelectorAll(
-          'h1, h2, .hero-description, .hero-side-note, .made-note, .section-heading > p, .growth-title > p, .growth-notes, .contact > p, .contact-links, .ending'
+          'h1, h2, .hero-description, .hero-side-note, .made-note, .section-heading > p, .workflow-summary, .personal-project-stamp, .workflow-notes, .workflow-cue-timeline, .project-provenance-board, .workflow-footnote, .more-work-intro, .hanging-memories-section, .polaroid-memory-card, .growth-title > p, .growth-notes, .contact > p, .contact-links, .ending'
         ),
       ].map((el) => {
         const r = el.getBoundingClientRect()
@@ -406,22 +403,36 @@ export default function App() {
 
         {/* Khẩu hiệu phong cách editorial */}
         <a className="header-note" href="#chapter-1">
-          A LITTLE PORTFOLIO. A BIG IMAGINATION.
+          {t.common.headerNote}
         </a>
 
-        {/* Liên kết điều hướng nhanh đến Selected Works và Contact */}
+        {/* Liên kết điều hướng nhanh đến Selected Works, Contact và đổi ngôn ngữ */}
         <nav>
           <a href="#chapter-3">
-            Selected work <span>↗</span>
+            {t.common.selectedWork} <span>↗</span>
           </a>
           <a href="#chapter-5" className="talk-link">
-            Let’s talk <span>↗</span>
+            {t.common.letsTalk} <span>↗</span>
           </a>
+
+          {/* Nút chuyển đổi ngôn ngữ Việt / Anh */}
+          <button
+            type="button"
+            className="lang-toggle-btn"
+            onClick={toggleLang}
+            aria-label={t.common.switchLanguage}
+            title={t.common.switchLanguage}
+          >
+            <span className={`lang-badge ${lang === 'vi' ? 'is-active' : ''}`}>VI</span>
+            <span className="lang-sep">/</span>
+            <span className={`lang-badge ${lang === 'en' ? 'is-active' : ''}`}>EN</span>
+          </button>
+
           <button
             className="menu-toggle"
             onClick={() => setMenu(!menu)}
             aria-expanded={menu}
-            aria-label="Open chapter navigation"
+            aria-label={t.common.menuToggle}
           >
             ☰
           </button>
@@ -499,15 +510,15 @@ export default function App() {
           {/* Topline đầu trang */}
           <div className="hero-topline">
             <span className="tiny-star">✳</span>
-            THE IMPOSSIBLE CHALKBOARD
-            <span className="edition">VOL. 01 — AN ONGOING STORY</span>
+            {t.hero.toplineLabel}
+            <span className="edition">{t.hero.toplineEdition}</span>
           </div>
 
           {/* Khối giới thiệu tiêu đề tên và chức danh */}
           <div className="hero-content">
-            <div className="hero-kicker">Every story starts somewhere.</div>
+            <div className="hero-kicker">{t.hero.kicker}</div>
             <h1>
-              <span>Hi, I’m</span>
+              <span>{t.hero.greeting}</span>
               <br />
               Gia{' '}
               <em>
@@ -521,11 +532,11 @@ export default function App() {
             <div className="hero-description">
               <span className="drawn-arrow">↳</span>
               <p>
-                Frontend Developer.
+                {t.hero.role}
                 <br />
-                Building experiences,
+                {t.hero.buildingLead}
                 <br />
-                <span>one interaction at a time.</span>
+                <span>{t.hero.oneInteraction}</span>
               </p>
             </div>
           </div>
@@ -533,27 +544,26 @@ export default function App() {
           {/* Các chi tiết phấn trang trí và máy bay giấy */}
           <Star className="hero-star" />
           <div className="hero-side-note">
-            A curious mind,
-            <br />
-            a little code,
-            <br />
-            & a lot of possibilities.
+            {t.hero.sideNote.split('\n').map((line, idx, arr) => (
+              <span key={idx}>
+                {line}
+                {idx < arr.length - 1 && <br />}
+              </span>
+            ))}
             <svg viewBox="0 0 90 90">
               <path d="M12 4Q72 15 63 74m-13-12 13 16 9-18" />
             </svg>
           </div>
           <Plane className="hero-plane" />
-          <span className="plane-note">let’s see where this goes.</span>
+          <span className="plane-note">{t.hero.planeNote}</span>
 
           {/* Chân trang phần Hero với nút cuộn và số trang */}
           <div className="hero-bottom">
             <a href="#chapter-2" className="scroll-cue">
-              <span>↓</span> SCROLL TO FOLLOW THE STORY
+              <span>↓</span> {t.hero.scrollCue}
             </a>
-            <span className="made-note">
-              Drawn with curiosity. Built with intention.
-            </span>
-            <span className="hero-page">01 — 05</span>
+            <span className="made-note">{t.hero.madeNote}</span>
+            <span className="hero-page">{t.hero.pageIndicator}</span>
           </div>
         </section>
 
@@ -561,19 +571,16 @@ export default function App() {
             CHAPTER 02: ABOUT ME & ENGINEERING CRAFT
             ================================================================ */}
         <section id="chapter-2" data-chapter className="about chapter">
-          <Label n="02">A MIND FULL OF IDEAS</Label>
+          <Label n={t.about.chapterNum}>{t.about.chapterTitle}</Label>
 
           {/* Tiêu đề chương About */}
           <div className="about-heading reveal">
             <h2>
-              A little curious.
+              {t.about.headingMain}
               <br />
-              <em>A lot of possibility.</em>
+              <em>{t.about.headingAccent}</em>
             </h2>
-            <p>
-              I’m Gia Bảo, a frontend developer who likes to turn
-              <br className="desktop" /> “what if?” into something you can actually click.
-            </p>
+            <p>{t.about.intro}</p>
           </div>
 
           {/* Bảng hiện vật sáng tạo (Artifact board) */}
@@ -587,33 +594,36 @@ export default function App() {
                 height="500"
                 alt="A sunlit creative desk with a laptop and notebook"
               />
-              <span>where the little ideas begin.</span>
-              <small>WORKSPACE INSPIRATION · DENISE JANS / UNSPLASH</small>
+              <span>{t.about.polaroidCaption}</span>
+              <small>{t.about.polaroidCredit}</small>
             </div>
 
             {/* Mẩu giấy nhớ màu vàng ghim kim */}
             <div className="yellow-note reveal">
               <span className="pin" />
               <span className="hand">
-                Curious
-                <br />
-                by default.
+                {t.about.yellowNoteTitle.split('\n').map((line, idx, arr) => (
+                  <span key={idx}>
+                    {line}
+                    {idx < arr.length - 1 && <br />}
+                  </span>
+                ))}
               </span>
               <p>
-                Taking things apart.
+                {t.about.yellowNoteBody1}
                 <br />
-                Figuring things out.
+                {t.about.yellowNoteBody2}
                 <br />
-                Making them my own.
+                {t.about.yellowNoteBody3}
               </p>
               <Star />
             </div>
 
             {/* Chữ viết tay ngẫu hứng */}
             <div className="about-scribble">
-              the best part?
+              {t.about.scribbleLead}
               <br />
-              <span>there’s always more to learn.</span>
+              <span>{t.about.scribbleHighlight}</span>
               <svg viewBox="0 0 180 70">
                 <path d="M5 10q90 60 160 22m-20-5 22 4-12 17" />
               </svg>
@@ -622,13 +632,11 @@ export default function App() {
             {/* Giấy kẻ dòng dán băng keo ghi vài điều về bản thân */}
             <div className="lined-note reveal">
               <span className="tape" />
-              <span className="hand">A few things about me</span>
-              <p>Obsessed with the details.</p>
-              <p>Always building something.</p>
-              <p>Still learning. Always experimenting.</p>
-              <div className="note-bottom">
-                Ideas → experiments → little breakthroughs
-              </div>
+              <span className="hand">{t.about.linedNoteTitle}</span>
+              <p>{t.about.linedNotePoint1}</p>
+              <p>{t.about.linedNotePoint2}</p>
+              <p>{t.about.linedNotePoint3}</p>
+              <div className="note-bottom">{t.about.linedNoteBottom}</div>
             </div>
           </div>
         </section>
@@ -652,46 +660,58 @@ export default function App() {
             CHAPTER 04: STILL IN PROGRESS
             ================================================================ */}
         <section id="chapter-4" data-chapter className="growth chapter">
-          <Label n="04">STILL IN PROGRESS</Label>
+          <Label n={t.growth.chapterNum}>{t.growth.chapterTitle}</Label>
 
           <div className="growth-title reveal">
-            <span className="hand">a little reminder to myself</span>
+            <span className="hand">{t.growth.reminderHand}</span>
             <h2>
-              Not finished.
+              {t.growth.headingMain}
               <br />
-              <em>Just getting started.</em>
+              <em>{t.growth.headingAccent}</em>
             </h2>
             <p>
-              There’s always another thing to learn. Another idea to try.
-              <br />
-              Another small step toward the developer I want to become.
+              {t.growth.subtext.split('\n').map((line, idx, arr) => (
+                <span key={idx}>
+                  {line}
+                  {idx < arr.length - 1 && <br />}
+                </span>
+              ))}
             </p>
           </div>
 
           {/* 3 mẩu ghi nhớ nguyên tắc phát triển bản thân */}
           <div className="growth-notes reveal">
             <div>
-              <span>01 — KEEP EXPLORING</span>
+              <span>{t.growth.note1Title}</span>
               <p>
-                Follow the questions.
-                <br />
-                Even the strange ones.
+                {t.growth.note1Body.split('\n').map((line, idx, arr) => (
+                  <span key={idx}>
+                    {line}
+                    {idx < arr.length - 1 && <br />}
+                  </span>
+                ))}
               </p>
             </div>
             <div>
-              <span>02 — KEEP MAKING</span>
+              <span>{t.growth.note2Title}</span>
               <p>
-                Build small things.
-                <br />
-                Learn something big.
+                {t.growth.note2Body.split('\n').map((line, idx, arr) => (
+                  <span key={idx}>
+                    {line}
+                    {idx < arr.length - 1 && <br />}
+                  </span>
+                ))}
               </p>
             </div>
             <div>
-              <span>03 — WHAT’S NEXT?</span>
+              <span>{t.growth.note3Title}</span>
               <p>
-                A blank page.
-                <br />
-                A new possibility.
+                {t.growth.note3Body.split('\n').map((line, idx, arr) => (
+                  <span key={idx}>
+                    {line}
+                    {idx < arr.length - 1 && <br />}
+                  </span>
+                ))}
               </p>
             </div>
           </div>
@@ -703,41 +723,44 @@ export default function App() {
             <span />
             <Plane color="mint" />
           </div>
-          <span className="window-note">there’s a whole world out there.</span>
+          <span className="window-note">{t.growth.windowNote}</span>
         </section>
 
         {/* ================================================================
             CHAPTER 05: THE NEXT CHAPTER (CONTACT & SOCIALS)
             ================================================================ */}
         <section id="chapter-5" data-chapter className="contact chapter">
-          <Label n="05">THE NEXT CHAPTER</Label>
+          <Label n={t.contact.chapterNum}>{t.contact.chapterTitle}</Label>
           <Star className="contact-star" />
-          <span className="contact-kicker hand">Well, here we are.</span>
+          <span className="contact-kicker hand">{t.contact.kicker}</span>
           <h2>
-            Every good story
+            {t.contact.headingMain}
             <br />
-            leads to <em>another.</em>
+            leads to <em>{t.contact.headingAccent}</em>
           </h2>
           <p>
-            Have an idea worth building?
-            <br />
-            Let’s make something memorable.
+            {t.contact.subtext.split('\n').map((line, idx, arr) => (
+              <span key={idx}>
+                {line}
+                {idx < arr.length - 1 && <br />}
+              </span>
+            ))}
           </p>
 
           {/* Nút gửi email liên hệ chính */}
           <a className="contact-main" href="mailto:hello@example.com">
-            Let’s start a conversation <span>↗</span>
+            {t.contact.mainCta} <span>↗</span>
           </a>
 
           {/* Các liên kết mạng xã hội */}
           <div className="contact-links">
-            <a href="mailto:hello@example.com">Email ↗</a>
-            <button onClick={() => setModalTarget('github')}>GitHub ↗</button>
-            <button onClick={() => setModalTarget('linkedin')}>LinkedIn ↗</button>
+            <a href="mailto:hello@example.com">{t.contact.emailLabel}</a>
+            <button onClick={() => setModalTarget('github')}>{t.contact.githubLabel}</button>
+            <button onClick={() => setModalTarget('linkedin')}>{t.contact.linkedinLabel}</button>
           </div>
 
           <span className="contact-placeholder">
-            GIA BẢO · FRONTEND DEVELOPER · PORTFOLIO
+            {t.contact.tagline}
           </span>
 
           <Plane color="coral" className="contact-plane" />
@@ -745,8 +768,8 @@ export default function App() {
           {/* Chân trang kết thúc câu chuyện */}
           <div className="ending">
             <span className="signature">gb.</span>
-            <span>Thanks for following my little adventure.</span>
-            <a href="#chapter-1">BACK TO THE FIRST MARK ↑</a>
+            <span>{t.contact.thanksNote}</span>
+            <a href="#chapter-1">{t.contact.backToTop}</a>
           </div>
         </section>
       </main>
@@ -772,20 +795,20 @@ export default function App() {
             <button
               className="modal-close"
               onClick={() => setModalTarget(null)}
-              aria-label="Close dialog"
+              aria-label={t.common.close}
             >
               ×
             </button>
-            <span className="hand">The next little detail.</span>
+            <span className="hand">{t.modal.handNote}</span>
             <h2 id="contact-modal-title">
               {modalTarget === 'github'
-                ? 'Find me on GitHub.'
-                : 'Let’s connect on LinkedIn.'}
+                ? t.modal.githubTitle
+                : t.modal.linkedinTitle}
             </h2>
             <p>
-              Explore my repositories and open-source contributions on GitHub,
-              or connect directly via LinkedIn to discuss frontend engineering
-              opportunities.
+              {modalTarget === 'github'
+                ? t.modal.githubDesc
+                : t.modal.linkedinDesc}
             </p>
             <div className="placeholder-actions">
               {modalTarget === 'github' ? (
@@ -795,7 +818,7 @@ export default function App() {
                   rel="noopener noreferrer"
                   className="modal-ext-link"
                 >
-                  Visit https://github.com/GiaBao3009 ↗
+                  {t.modal.githubAction}
                 </a>
               ) : (
                 <a
@@ -804,7 +827,7 @@ export default function App() {
                   rel="noopener noreferrer"
                   className="modal-ext-link"
                 >
-                  Connect on LinkedIn ↗
+                  {t.modal.linkedinAction}
                 </a>
               )}
             </div>
