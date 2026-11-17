@@ -28,20 +28,20 @@ export function I18nProvider({
 }: {
   children: React.ReactNode
 }): React.JSX.Element {
-  // Mặc định tiếng Việt, ưu tiên lựa chọn đã lưu trong localStorage
+  // Mặc định tiếng Anh (EN), ưu tiên lựa chọn đã lưu trong localStorage
   const [lang, setLangState] = useState<Language>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('portfolio_lang')
+      const saved = localStorage.getItem('portfolio_lang_v2')
       if (saved === 'en' || saved === 'vi') return saved
     }
-    return 'vi'
+    return 'en'
   })
 
   // Đổi ngôn ngữ và lưu vào localStorage
   const setLang = (newLang: Language) => {
     setLangState(newLang)
     if (typeof window !== 'undefined') {
-      localStorage.setItem('portfolio_lang', newLang)
+      localStorage.setItem('portfolio_lang_v2', newLang)
       document.documentElement.lang = newLang
     }
   }

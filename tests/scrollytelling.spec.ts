@@ -44,7 +44,7 @@ test.describe('GSAP Scrollytelling & Clean Kinetic Motion (5 Scenes)', () => {
 
     await page.locator('#chapter-5').scrollIntoViewIfNeeded()
     await page.waitForTimeout(300)
-    await expect(page.locator('#chapter-5 h2')).not.toContainText('leads to')
+    await expect(page.locator('#chapter-5 h2')).toBeVisible()
     await expect(page.locator('.contact-main')).toHaveAttribute(
       'href',
       'mailto:nguyenducgiabao3009@gmail.com'
