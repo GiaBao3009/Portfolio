@@ -35,6 +35,15 @@
   letter-spacing: 1.5px;
 }
 
+/* Ẩn các thành phần riêng của Mobile khi ở màn hình Desktop */
+.board .chapter-guide .chapter-guide-mobile-top,
+.board .chapter-guide .chapter-guide-panel-head,
+.board .chapter-guide .chapter-guide-active-dot,
+.board .chapter-guide .chapter-guide-toggle,
+.board .chapter-guide .chapter-guide-chalk-line {
+  display: none;
+}
+
 .board .chapter-guide .chapter-guide-links {
   display: flex;
   flex-direction: column;
@@ -57,7 +66,9 @@
   transition: none;
 }
 
-.board .chapter-guide .chapter-guide-links a::after { content: none; }
+.board .chapter-guide .chapter-guide-links a::after {
+  content: none;
+}
 
 .board .chapter-guide .chapter-guide-mark {
   position: static;
@@ -72,12 +83,15 @@
   font-size: 10px;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
   opacity: 1;
   translate: none;
   transform: rotate(-3deg);
   pointer-events: none;
-  transition: border-color .15s, color .15s, background-color .15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background-color 0.15s;
 }
 
 .board .chapter-guide a:nth-child(even) .chapter-guide-mark {
@@ -124,13 +138,16 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 1.5;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   white-space: normal;
   opacity: 0;
   visibility: hidden;
   translate: 4px -50%;
   pointer-events: none;
-  transition: opacity .15s, translate .15s, visibility .15s;
+  transition:
+    opacity 0.15s,
+    translate 0.15s,
+    visibility 0.15s;
 }
 
 .board .chapter-guide a:hover .chapter-guide-label,
@@ -150,74 +167,462 @@
   letter-spacing: 2px;
 }
 
-.board .chapter-guide-toggle { display: none; }
-
 @media (max-width: 1000px) and (min-width: 701px) {
-  .board .chapter-rail.chapter-guide { right: 0; width: 50px; }
+  .board .chapter-rail.chapter-guide {
+    right: 0;
+    width: 50px;
+  }
+}
+
+/* ==========================================================================
+   MOBILE STORY NAVIGATION — THE IMPOSSIBLE CHALKBOARD (<= 700px)
+   ========================================================================== */
+@keyframes chapterTitleSlide {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 700px) {
+  /* Ẩn thanh bottom-progress mặc định để tránh bị lặp 2 đường kẻ vàng song song */
+  .board .bottom-progress {
+    display: none;
+  }
+
   .board .chapter-rail.chapter-guide {
     top: auto;
-    right: 16px;
-    bottom: max(16px, env(safe-area-inset-bottom));
-    width: 252px;
-    max-width: calc(100vw - 32px);
-    max-height: calc(100svh - 32px);
+    left: 12px;
+    right: 12px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 30;
+    width: auto;
+    max-width: 420px;
+    max-height: calc(100svh - 24px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
     align-items: stretch;
     gap: 0;
-    border: 1px solid var(--color-dust);
-    border-radius: 3px 5px 2px 4px;
-    background: var(--color-board);
+    border: 1px solid rgba(244, 240, 230, 0.16);
+    border-bottom: 0;
+    border-radius: 5px 7px 3px 4px;
+    background: rgba(26, 27, 24, 0.96);
+    box-shadow:
+      0 14px 36px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(244, 240, 230, 0.07);
+    backdrop-filter: blur(6px);
     transform: none;
+    overflow: hidden;
   }
 
   .board .chapter-guide .chapter-guide-progress,
-  .board .chapter-guide .rail-word { display: none; }
+  .board .chapter-guide .rail-word {
+    display: none;
+  }
 
-  .board .chapter-guide-toggle {
+  /* A & B: Hàng trên cùng — Logo chữ ký gb. (góc trên trái) & Back to First Mark (góc trên phải) */
+  .board .chapter-rail.chapter-guide > .chapter-guide-mobile-top {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 8px 14px 7px;
+    border-bottom: 1px dashed rgba(244, 240, 230, 0.13);
+    background: rgba(18, 19, 17, 0.45);
+  }
+
+  /* Reset rule .chapter-rail a { width: 4px; height: 4px } từ index.css */
+  .board .chapter-rail.chapter-guide .chapter-guide-signature,
+  .board .chapter-rail.chapter-guide .chapter-guide-first-mark {
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    flex-shrink: 0;
+  }
+
+  /* A. Logo chữ ký viết tay góc trên bên trái */
+  .board .chapter-rail.chapter-guide .chapter-guide-signature {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--font-hand);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--color-chalk);
+    transform: rotate(-7deg);
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .board .chapter-rail.chapter-guide .chapter-guide-signature span {
+    color: var(--color-yellow);
+    margin-left: 1px;
+  }
+
+  .board .chapter-rail.chapter-guide .chapter-guide-signature:hover,
+  .board .chapter-rail.chapter-guide .chapter-guide-signature:focus-visible {
+    color: var(--color-yellow);
+    transform: rotate(-4deg);
+  }
+
+  /* B. Hành động Quay về nét vẽ đầu tiên góc trên bên phải */
+  .board .chapter-rail.chapter-guide .chapter-guide-first-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-sans);
+    font-size: 8.5px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #c8c5b8;
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  .board .chapter-rail.chapter-guide .chapter-guide-first-mark i {
+    display: inline-block;
+    font-style: normal;
+    font-size: 11px;
+    line-height: 1;
+    color: var(--color-yellow);
+    transition: transform 0.2s ease;
+  }
+
+  .board .chapter-rail.chapter-guide .chapter-guide-first-mark:hover,
+  .board .chapter-rail.chapter-guide .chapter-guide-first-mark:focus-visible {
+    color: var(--color-chalk);
+  }
+
+  .board .chapter-rail.chapter-guide .chapter-guide-first-mark:hover i,
+  .board .chapter-rail.chapter-guide .chapter-guide-first-mark:focus-visible i {
+    transform: translateY(-2px);
+  }
+
+  /* C. Current Chapter Navigation — Thẻ đánh dấu chương phong cách Editorial */
+  .board .chapter-guide .chapter-guide-toggle {
+    display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 12px;
     min-height: 48px;
     width: 100%;
-    padding: 10px 12px;
+    padding: 9px 14px 10px;
+    background: transparent;
+    border: 0;
     color: var(--color-chalk);
     text-align: left;
+    transition: background-color 0.2s ease;
   }
 
-  .chapter-guide-count { color: var(--color-yellow); font-size: 11px; }
-  .chapter-guide-current { flex: 1; min-width: 0; font-size: 12px; line-height: 1.4; }
-  .chapter-guide-toggle svg { width: 16px; height: 16px; flex-shrink: 0; stroke: var(--color-dust); stroke-width: 1.5; }
-  .is-open .chapter-guide-toggle svg { transform: rotate(180deg); }
-  .board .chapter-guide-toggle:hover { color: var(--color-yellow); }
-  .board .chapter-guide .chapter-guide-links { display: none; overflow-y: auto; padding: 4px 8px 8px; gap: 0; }
-  .board .chapter-guide.is-open .chapter-guide-links { display: flex; border-top: 1px solid var(--color-dust); }
-  .board .chapter-guide .chapter-guide-links a { width: 100%; min-height: 46px; height: auto; justify-content: flex-start; gap: 12px; padding: 5px 4px; }
-  .board .chapter-guide .chapter-guide-mark { flex-shrink: 0; }
+  .board .chapter-guide .chapter-guide-toggle:active {
+    background: rgba(244, 203, 85, 0.05);
+  }
+
+  /* Cụm số thứ tự chương: 05 / 05 (Typography thuần, không đóng khung hộp) */
+  .board .chapter-guide-count {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 3px;
+    font-family: var(--font-sans);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .board .chapter-guide-count .count-active {
+    color: var(--color-yellow);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+  }
+
+  .board .chapter-guide-count .count-sep {
+    color: rgba(244, 240, 230, 0.35);
+    font-style: normal;
+    font-size: 11px;
+  }
+
+  .board .chapter-guide-count .count-total {
+    color: var(--color-dust);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.6px;
+  }
+
+  /* Nét gạch phấn ngăn cách thủ công */
+  .board .chapter-guide-divider {
+    width: 1px;
+    height: 18px;
+    flex-shrink: 0;
+    background: rgba(244, 240, 230, 0.22);
+    transform: rotate(10deg);
+  }
+
+  /* Tên chương hiện tại (Cormorant Garamond nghiêng tinh tế) */
+  .board .chapter-guide-current {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .board .chapter-guide-current-text {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 18.5px;
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.15;
+    letter-spacing: -0.2px;
+    color: var(--color-chalk);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    animation: chapterTitleSlide 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Cụm bên phải: 5 vạch tiến độ chương + Nút đóng/mở */
+  .board .chapter-guide-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .board .chapter-guide-mini-ticks {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 13px;
+  }
+
+  .board .chapter-guide-mini-ticks i {
+    display: block;
+    width: 2px;
+    height: 5px;
+    border-radius: 1px;
+    background: rgba(244, 240, 230, 0.2);
+    transition:
+      height 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .board .chapter-guide-mini-ticks i.is-passed {
+    height: 8px;
+    background: rgba(244, 203, 85, 0.55);
+  }
+
+  .board .chapter-guide-mini-ticks i.is-current {
+    height: 12px;
+    background: var(--color-yellow);
+  }
+
+  .board .chapter-guide-chevron {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(244, 240, 230, 0.22);
+    border-radius: 46% 54% 48% 52%;
+    background: rgba(244, 240, 230, 0.03);
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .board .chapter-guide-chevron svg {
+    width: 13px;
+    height: 13px;
+    stroke: var(--color-chalk);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition:
+      transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+      stroke 0.2s ease;
+  }
+
+  .board .chapter-guide.is-open .chapter-guide-chevron {
+    border-color: var(--color-yellow);
+    background: rgba(244, 203, 85, 0.12);
+  }
+
+  .board .chapter-guide.is-open .chapter-guide-chevron svg {
+    transform: rotate(180deg);
+    stroke: var(--color-yellow);
+  }
+
+  /* Nét phấn vàng duy nhất chạy ngang xuyên suốt đáy phần Navigation */
+  .board .chapter-rail.chapter-guide > .chapter-guide-chalk-line {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 2.5px;
+    background: rgba(244, 240, 230, 0.14);
+    overflow: hidden;
+  }
+
+  .board .chapter-rail.chapter-guide > .chapter-guide-chalk-line .chalk-line-fill {
+    display: block;
+    height: 100%;
+    width: var(--chapter-ratio, 20%);
+    background: var(--color-yellow);
+    box-shadow: 0 0 8px rgba(244, 203, 85, 0.6);
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Danh sách chương mở rộng (Unfolding Chapter Index Panel) */
+  .board .chapter-rail.chapter-guide > .chapter-guide-links {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 10px;
+    border-bottom: 0 solid rgba(244, 240, 230, 0.12);
+    background: rgba(20, 21, 18, 0.95);
+    pointer-events: none;
+    transition:
+      max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.22s ease,
+      padding 0.25s ease;
+  }
+
+  .board .chapter-rail.chapter-guide.is-open > .chapter-guide-links {
+    max-height: 320px;
+    opacity: 1;
+    overflow-y: auto;
+    padding: 8px 10px 8px;
+    border-bottom: 1px solid rgba(244, 240, 230, 0.12);
+    pointer-events: auto;
+  }
+
+  /* Header nhỏ bên trong bảng chọn chương */
+  .board .chapter-rail.chapter-guide .chapter-guide-panel-head {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2px 6px 6px;
+    margin-bottom: 2px;
+    border-bottom: 1px dashed rgba(244, 240, 230, 0.12);
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--color-dust);
+  }
+
+  .board .chapter-rail.chapter-guide .chapter-guide-panel-head .panel-head-count {
+    color: var(--color-yellow);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .board .chapter-rail.chapter-guide > .chapter-guide-links a {
+    width: 100%;
+    min-height: 42px;
+    height: auto;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 5px 8px;
+    border-radius: 3px 5px 2px 4px;
+    border-left: 2px solid transparent;
+    background: none;
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .board .chapter-rail.chapter-guide > .chapter-guide-links a.current {
+    background: rgba(244, 203, 85, 0.08);
+    border-left-color: var(--color-yellow);
+  }
+
+  .board .chapter-guide .chapter-guide-mark {
+    flex-shrink: 0;
+  }
+
   .board .chapter-guide .chapter-guide-label {
     position: static;
+    flex: 1;
     max-width: none;
     width: auto;
     padding: 0;
     border: 0;
     background: none;
+    font-family: var(--font-display);
+    font-size: 16.5px;
+    font-style: italic;
+    line-height: 1.25;
+    color: var(--color-chalk);
     opacity: 1;
     visibility: visible;
     translate: none;
-    transition: none;
+    transition: color 0.18s ease;
   }
+
   .board .chapter-guide a:hover .chapter-guide-label,
-  .board .chapter-guide a:focus-visible .chapter-guide-label { translate: none; color: var(--color-yellow); }
-  .board .chapter-guide a.current .chapter-guide-label { color: var(--color-yellow); }
+  .board .chapter-guide a:focus-visible .chapter-guide-label {
+    translate: none;
+    color: var(--color-yellow);
+  }
+
+  .board .chapter-guide a.current .chapter-guide-label {
+    color: var(--color-yellow);
+    font-weight: 600;
+  }
+
+  /* Chấm phấn vàng đánh dấu chương đang đọc */
+  .board .chapter-guide .chapter-guide-active-dot {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: transparent;
+    flex-shrink: 0;
+  }
+
+  .board .chapter-guide a.current .chapter-guide-active-dot {
+    background: var(--color-yellow);
+    box-shadow: 0 0 6px rgba(244, 203, 85, 0.7);
+  }
 }
 
 @media (min-width: 701px) and (max-height: 700px) {
-  .board .chapter-rail.chapter-guide { gap: 10px; }
-  .board .chapter-guide .rail-word { writing-mode: horizontal-tb; max-width: 68px; font-size: 9px; line-height: 1.5; letter-spacing: .7px; text-align: center; }
+  .board .chapter-rail.chapter-guide {
+    gap: 10px;
+  }
+  .board .chapter-guide .rail-word {
+    writing-mode: horizontal-tb;
+    max-width: 68px;
+    font-size: 9px;
+    line-height: 1.5;
+    letter-spacing: 0.7px;
+    text-align: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .board .chapter-guide .chapter-guide-mark,
-  .board .chapter-guide .chapter-guide-label { transition: none; }
+  .board .chapter-guide .chapter-guide-label,
+  .board .chapter-guide .chapter-guide-links,
+  .board .chapter-guide-chalk-line .chalk-line-fill,
+  .board .chapter-guide-chevron svg {
+    transition: none;
+    animation: none;
+  }
 }

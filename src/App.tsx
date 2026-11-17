@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import ChapterNavigation from './ChapterNavigation'
 import SelectedWorks from './SelectedWorks'
 import { useI18n } from './assets/i18n'
+import { useChalkboardScroll } from './hooks/useChalkboardScroll'
 
 
 /**
@@ -120,6 +121,9 @@ export default function App() {
   // Cờ giảm chuyển động theo tùy chọn người dùng
   const [motion, setMotion] = useState(false)
 
+  // Kích hoạt hệ thống Scrollytelling GSAP + ScrollTrigger cho toàn bộ bảng đen
+  useChalkboardScroll(board, lang)
+
   // Đường dẫn SVG chalk path và các vùng tránh chữ
   const [route, setRoute] = useState({
     d: '',
@@ -166,9 +170,9 @@ export default function App() {
         '.polaroid',
         '.lined-note',
         '.signature-scene',
-        '.archive-card',
+        '.hanging-memories-section',
         '.chalk-window',
-        '.contact-main',
+        '.contact-links',
       ]
 
       const points = landmarks
@@ -180,7 +184,9 @@ export default function App() {
             i === 0
               ? r.left + r.width / 2
               : i === landmarks.length - 1
-                ? r.right + 24
+                ? mobile
+                  ? bounds.left + bounds.width * 0.24
+                  : r.left - 36
                 : i % 2
                   ? r.left - 22
                   : r.right + 22
@@ -190,10 +196,17 @@ export default function App() {
                 18,
                 Math.min(
                   bounds.width - 20,
-                  mobile && i > 0 ? (i % 2 ? 22 : bounds.width - 22) : x - bounds.left
+                  mobile && i > 0 && i < landmarks.length - 1
+                    ? i % 2
+                      ? 18
+                      : bounds.width - 18
+                    : x - bounds.left
                 )
               ),
-              y: r.top - bounds.top + (i === 3 ? 40 : r.height * 0.65),
+              y:
+                i === landmarks.length - 1
+                  ? r.bottom - bounds.top + 28
+                  : r.top - bounds.top + (i === 3 ? 40 : r.height * 0.65),
             },
           ]
         })
@@ -209,10 +222,10 @@ export default function App() {
         })
         .join(' ')
 
-      // Vùng chắn để mask không che mất chữ
+      // Vùng chắn để mask không che mất chữ hoặc đè lên các khối nội dung
       const clear = [
         ...board.current.querySelectorAll(
-          'h1, h2, .hero-description, .hero-side-note, .made-note, .section-heading > p, .workflow-summary, .personal-project-stamp, .workflow-notes, .workflow-cue-timeline, .project-provenance-board, .workflow-footnote, .more-work-intro, .hanging-memories-section, .polaroid-memory-card, .growth-title > p, .growth-notes, .contact > p, .contact-links, .ending'
+          'h1, h2, h3, h4, .chapter-label, .hero-description, .hero-side-note, .made-note, .scroll-cue, .about-heading, .polaroid, .yellow-note, .about-scribble, .lined-note, .section-heading, .featured-section-intro, .project-selector-rail, .workflow-heading, .workflow-demonstration, .workflow-notes, .workflow-cue-timeline, .project-provenance-board, .workflow-footnote, .more-work-intro, .hanging-memories-section, .polaroid-memory-card, .selected-works-ending, .growth-title, .growth-notes, .chalk-window, .window-note, .contact-kicker, .contact > p, .contact-main, .contact-links, .contact-plane, .ending'
         ),
       ].map((el) => {
         const r = el.getBoundingClientRect()
@@ -736,7 +749,8 @@ export default function App() {
           <h2>
             {t.contact.headingMain}
             <br />
-            leads to <em>{t.contact.headingAccent}</em>
+            {lang === 'en' ? 'leads to ' : ''}
+            <em>{t.contact.headingAccent}</em>
           </h2>
           <p>
             {t.contact.subtext.split('\n').map((line, idx, arr) => (
@@ -748,15 +762,14 @@ export default function App() {
           </p>
 
           {/* Nút gửi email liên hệ chính */}
-          <a className="contact-main" href="mailto:hello@example.com">
+          <a className="contact-main" href="mailto:nguyenducgiabao3009@gmail.com">
             {t.contact.mainCta} <span>↗</span>
           </a>
 
-          {/* Các liên kết mạng xã hội */}
+          {/* Các liên kết mạng xã hội (Email & GitHub) */}
           <div className="contact-links">
-            <a href="mailto:hello@example.com">{t.contact.emailLabel}</a>
+            <a href="mailto:nguyenducgiabao3009@gmail.com">{t.contact.emailLabel}</a>
             <button onClick={() => setModalTarget('github')}>{t.contact.githubLabel}</button>
-            <button onClick={() => setModalTarget('linkedin')}>{t.contact.linkedinLabel}</button>
           </div>
 
           <span className="contact-placeholder">

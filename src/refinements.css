@@ -16,8 +16,9 @@
 .board .chapter-menu { max-width: calc(100vw - 40px); max-height: calc(100svh - 115px); overflow-y: auto; }
 .board .chapter-menu a:hover, .board .chapter-menu a:focus-visible { background: #20211f0c; }
 .board .about-heading > p, .board .section-heading > p, .board .growth-title > p { font-size: var(--reading-size); line-height: 1.85; }
+.board .about-heading > p { max-width: 520px; }
 .board .section-heading > p { max-width: 320px; }
-.board .yellow-note { right: 17%; }
+.board .yellow-note { top: 20px; right: 14%; }
 .board .yellow-note p { font-size: 12px; }
 .board .polaroid small { font-size: 7px; line-height: 1.5; }
 .board .skill-lists p { font-size: 13px; }
@@ -71,7 +72,8 @@
 .board .signature-scene + .project-two { margin-top: 75px; }
 
 @media (min-width: 701px) and (max-width: 1000px) {
-  .board .yellow-note { right: 0; }
+  .board .about-heading > p { max-width: 440px; }
+  .board .yellow-note { top: 24px; right: 0; }
   .signature-scene { min-height: 1150px; }
   .transformation-caption { margin-bottom: 65px; }
   .board .signature-scene .project-one { gap: 32px; grid-template-columns: 1.1fr 1fr; }
@@ -84,26 +86,75 @@
 
 @media (max-width: 700px) {
   :root { --reading-size: 13px; }
-  .board .hero { min-height: 750px; }
-  .board .hero-content { top: 130px; width: 96%; left: 2%; }
-  .board .hero h1 { font-size: 24vw; letter-spacing: -4px; }
-  .board .hero-kicker { font-size: 22px; white-space: nowrap; margin-bottom: 25px; }
-  .board .hero-description { margin-top: 28px; }
-  .board .hero-description p { font-size: 12px; }
-  .board .hero-side-note { top: 490px; left: 3%; right: auto; font-size: 23px; max-width: 55%; }
-  .board .hero-plane { width: 100px; top: 500px; right: 1%; }
+  .board .hero { min-height: 700px; height: auto; padding-bottom: 95px; }
+  .board .hero-content { position: relative; top: auto; width: 100%; left: 0; padding-top: 90px; }
+  .board .hero h1 { font-size: clamp(64px, 21vw, 92px); letter-spacing: -3px; white-space: normal; }
+  .board .hero-kicker { font-size: 21px; white-space: normal; margin-bottom: 18px; line-height: 1.25; }
+  .board .hero-description { margin-top: 24px; margin-left: 4px; }
+  .board .hero-description p { font-size: 12.5px; }
+  .board .hero-side-note { position: relative; top: auto; left: auto; right: auto; font-size: 22px; max-width: 75%; margin-top: 36px; }
+  .board .hero-plane { width: 92px; top: auto; bottom: 95px; right: 4%; }
   .board .hero-side-note svg { left: 70px; }
-  .board .plane-note { top: 610px; font-size: 20px; }
-  .board .travelling-plane .plane { width: 32px; }
-  .board .journey-path { opacity: .55; }
+  .board .plane-note { top: auto; bottom: 72px; right: 4%; font-size: 19px; }
+  .board .travelling-plane { display: none; }
+  .board .journey-path { display: none; }
   .board .site-header nav { gap: 15px; }
   .board .about-heading > p, .board .section-heading > p { max-width: 100%; }
-  .board .artifact-board { height: 870px; }
-  .board .yellow-note { top: 310px; right: 0; width: 58%; padding: 23px 20px 35px; }
-  .board .yellow-note p { font-size: 11px; }
-  .board .about-scribble { top: 475px; width: 42%; font-size: 22px; }
-  .board .lined-note { top: 625px; }
-  .board .note-bottom { font-size: 8px; line-height: 1.8; padding-top: 20px; }
+  .board .artifact-board {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    height: auto;
+    margin-top: 36px;
+  }
+  .board .polaroid {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 86%;
+    max-width: 320px;
+    padding: 12px 12px 14px;
+    transform: rotate(-3deg);
+  }
+  .board .yellow-note {
+    position: relative;
+    top: auto;
+    right: auto;
+    align-self: flex-end;
+    width: 76%;
+    max-width: 260px;
+    min-height: 0;
+    padding: 22px 20px 30px;
+    transform: rotate(3deg);
+  }
+  .board .yellow-note p { font-size: 11.5px; }
+  .board .about-scribble {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 78%;
+    font-size: 22px;
+    margin: 4px 0 8px 6px;
+  }
+  .board .about-scribble svg {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 72px;
+    height: 36px;
+    margin-top: 4px;
+    transform: rotate(18deg);
+  }
+  .board .lined-note {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    padding: 26px 20px 22px;
+    transform: rotate(-1.5deg);
+  }
+  .board .note-bottom { font-size: 8.5px; line-height: 1.7; padding-top: 18px; }
   .board .skill-lists { grid-template-columns: 1fr; gap: 22px; }
   .board .skill-lists > div { padding-left: 38px; }
   .board .skill-number { position: absolute; top: 9px; left: 0; }
@@ -125,14 +176,59 @@
   .board .gather-tiles small { font-size: 6px; line-height: 1.6; }
   .board .task-row { font-size: 8px; line-height: 1.5; }
   .board .task-row span { font-size: 6px; }
-  .board .growth-title > p { max-width: 100%; }
-  .board .growth-notes { width: 74%; }
-  .board .growth-notes > div > span { font-size: 8px; }
-  .board .contact h2 { font-size: clamp(44px, 13.4vw, 70px); margin-left: -3%; margin-right: -3%; }
-  .board .contact-main { min-height: var(--comfortable-target); font-size: 14px; }
-  .board .contact-placeholder { font-size: 7px; max-width: 270px; margin: 20px auto 0; }
-  .board .contact-plane { top: 555px; }
-  .board .ending > a { font-size: 8px; }
+  .board .growth { min-height: 0; padding-top: 55px; padding-bottom: 65px; }
+  .board .growth-title { margin-top: 28px; }
+  .board .growth-title > .hand { font-size: 22px; line-height: 1.3; margin-bottom: 16px; }
+  .board .growth-title > p { max-width: 100%; font-size: 12.5px; }
+  .board .growth-notes { width: 100%; gap: 22px; margin-top: 34px; }
+  .board .growth-notes > div > span { font-size: 8.5px; }
+  .board .chalk-window {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 118px;
+    height: 175px;
+    margin: 38px 12px 0 auto;
+    opacity: 0.72;
+  }
+  .board .window-note {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: block;
+    text-align: right;
+    margin-top: 18px;
+    font-size: 19px;
+  }
+  .board .contact { min-height: 0; padding-top: 55px; padding-bottom: 24px; }
+  .board .contact-kicker { margin-top: 34px; font-size: 23px; line-height: 1.3; }
+  .board .contact h2 {
+    font-size: clamp(38px, 10.6vw, 54px);
+    line-height: 1.06;
+    letter-spacing: -1.5px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .board .contact-main { min-height: var(--comfortable-target); font-size: 14px; gap: 18px; }
+  .board .contact-placeholder { font-size: 7.5px; max-width: 280px; margin: 22px auto 0; }
+  .board .contact-plane {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 72px;
+    margin: 26px auto 0;
+    display: block;
+  }
+  .board .ending {
+    margin-top: 55px;
+    padding-bottom: 126px;
+    display: block;
+    text-align: center;
+  }
+  .board .ending .signature,
+  .board .ending > a {
+    display: none;
+  }
   .board .project-modal .studio-body h4 { font-size: 32px; }
   .board .project-modal .studio-body { min-height: 230px; }
   .board .project-modal .product-nav > span { font-size: 7px; }
@@ -210,4 +306,13 @@
   opacity: 0.3;
   font-size: 9px;
 }
+
+.board .artifact-board > .polaroid,
+.board .artifact-board > .yellow-note,
+.board .artifact-board > .about-scribble,
+.board .artifact-board > .lined-note {
+  z-index: 2;
+  will-change: transform;
+}
+
 

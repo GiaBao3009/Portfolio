@@ -1,7 +1,8 @@
 {
-  "description": "An immersive scroll-driven portfolio that narrates a frontend developer's journey through interactive chalkboard visuals and animated storytelling.",
+  "title": "Gia Bảo | Frontend Developer Portfolio",
+  "description": "Portfolio của Nguyễn Đức Gia Bảo — Frontend Developer chuyên xây dựng sản phẩm web tương tác, hệ thống real-time và trải nghiệm người dùng hiện đại.",
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
     "addBypassLinks": false,

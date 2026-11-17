@@ -3,10 +3,12 @@ import {
   getFeaturedProjects,
   getSupportingProjects,
   type FeaturedProject,
+  type SupportingProject,
   type VideoAnnotation,
 } from './data/selectedWorks'
 import { useI18n } from './assets/i18n'
 import PaperUnfoldScene from './PaperUnfoldScene'
+import { useSelectedWorksMotion } from './hooks/useSelectedWorksMotion'
 import './selected-works.css'
 
 /**
@@ -1254,6 +1256,15 @@ export default function SelectedWorks({
   const currentAnnotation: VideoAnnotation | undefined =
     currentFeatured.annotations[selectedCue]
 
+  // Kích hoạt hệ thống chuyển động GSAP + ScrollTrigger cho Chapter 03
+  useSelectedWorksMotion({
+    sectionRef,
+    sceneRef,
+    stageRef,
+    featuredIndex,
+    reducedMotion,
+  })
+
   // Lắng nghe tùy chọn giảm chuyển động của hệ điều hành
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -1600,7 +1611,7 @@ export default function SelectedWorks({
           <div className="workflow-heading" data-chalk-reveal>
             {/* Cột trái: vai trò, tem dự án cá nhân, tên dự án và công nghệ */}
             <div className="workflow-identity-col">
-              {/* Dấu ấn dự án cá nhân từ đầu năm 2025 viết kiểu tem phấn bảng đen */}
+              {/* Dấu ấn dự án cá nhân từ đầu năm 2025 tối giản không khung viền rối */}
               {currentFeatured.provenance && (
                 <div className="personal-project-stamp">
                   <span className="stamp-star" aria-hidden="true">
@@ -1609,14 +1620,6 @@ export default function SelectedWorks({
                   <span className="stamp-label">
                     {currentFeatured.provenance.badge}
                   </span>
-                  <svg
-                    className="stamp-underline"
-                    viewBox="0 0 220 12"
-                    preserveAspectRatio="none"
-                    aria-hidden="true"
-                  >
-                    <path d="M 2 7 Q 60 2, 118 6 T 218 5" />
-                  </svg>
                 </div>
               )}
 
@@ -1668,19 +1671,13 @@ export default function SelectedWorks({
             </div>
           </div>
 
-          {/* Khung video 16:9 cinematic không player chrome, có góc ngắm phấn phản hồi theo nhịp cuộn */}
+          {/* Khung video 16:9 cinematic sạch sẽ, không viền phụ gây rối */}
           <figure
             ref={stageRef}
             className="workflow-demonstration"
             data-chalk-reveal
             aria-label={`${currentFeatured.name} demonstration video`}
           >
-            {/* Bốn góc đánh dấu phấn ngoài khung hình tạo cảm giác trình chiếu bảng đen khi cuộn */}
-            <span className="chalk-frame-corner corner-tl" aria-hidden="true" />
-            <span className="chalk-frame-corner corner-tr" aria-hidden="true" />
-            <span className="chalk-frame-corner corner-bl" aria-hidden="true" />
-            <span className="chalk-frame-corner corner-br" aria-hidden="true" />
-
             {/* Vùng chứa media tự động khớp tỉ lệ tự nhiên của video */}
             <div
               className="workflow-media"

@@ -1,5 +1,5 @@
 {
-  "name": "figma-make-app",
+  "name": "giabao-frontend-portfolio",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.2",
+    "gsap": "^3.15.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "three": "^0.186.1"
